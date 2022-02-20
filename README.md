@@ -1,9 +1,7 @@
 # Sample Project for Eluvio App
 By Jongwon Park
 
-## Requirements
-- Node
-- Redis
+Stack: Node.js/TypeScript, Jest, and Redis
 
 ## Guide
 1. Start local redis and adjust REDIS_PORT=6379 accordingly
@@ -18,3 +16,10 @@ e.g. http://localhost:5678/get?ids=sdkflcoersf,xf4934djk
 ## Workings
 1. Uses `redis`, which will return cached data instead of re-fetching data for the same ID. Each key is expired after 60s to ensure data accuracy.
 2. Uses `EventEmitter` to maximize concurrency (max 5 for the given API). So there are always 5 outgoing API requests, each a unique ID (ones not cached in `redis`).
+
+## Structure
+"Concurrency pool" manages current outgoing API calls and is capped at size of 5. Once an API call is complete, it emits an event that removes the API's requested ID from the pool. If there are more IDs left to fetch (ie. requestIDs queue is not empty), the requestID queue is shifted and the first request ID is added to the concurrency pool.
+
+By using a set for the concurrency pool, we ignore duplicate request IDs & we also perform additional validations to skip duplicate request IDs.
+
+When our API route (`/get`) is called, a new request router is opened & all requested IDs are added to the queue, and the concurrency pool begins.
