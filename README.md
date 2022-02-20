@@ -4,8 +4,11 @@ By Jongwon Park
 Stack: Node.js/TypeScript, Jest, and Redis
 
 ## Guide
-1. Start local redis and adjust REDIS_PORT=6379 accordingly
-2. Access `localhost:APP_PORT/get?ids=...,...,...`, where `...,...,...` is comma-separated ids. 
+1. Run `npm install`
+2. Copy `.env.example` to `.env` in the root folder.
+3. Start local redis and adjust `REDIS_PORT=6379` accordingly.
+4. Run `npm run start` and adjust `APP_PORT=5678` if needed.
+5. Access `localhost:APP_PORT/get?ids=...,...,...`, where `...,...,...` is comma-separated ids. 
 
 e.g. http://localhost:5678/get?ids=sdkflcoersf,xf4934djk
 
